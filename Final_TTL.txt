@@ -1,0 +1,689 @@
+/*
+------------------------------------------------------------------------------------------------
+|  PROJECT : COMBINATIONAL LOGIC TESTER (TTL FAMILY)               |
+|  GROUP MEMBERS : DION GAVIN MASCARENHAS - 55054619            |
+|                                        RELEKAR RAHUL                     - 54886094             |
+|  COURSE CODE : EE2004                                                                                |
+|  COURSE NAME : MICROCOMPUTER SYSTEMS                                      |
+| --------------------------------------------------------------------------------------------- |
+|  LANGUAGE USED : C   //ASSEMBLY LANGUAGE                                   |
+|  COMPILER USED : MPLAB IDE V.8.80 (C18)                                              |
+|  INTEGRATED CIRCUITS TESTED : 74LS08, 74LS32, 74LS86, 74LS132. |
+|  LOGIC GATE TESTED          :    AND,     OR,    XOR,    NAND.                  |
+|                                                                                                                              |
+------------------------------------------------------------------------------------------------
+*/
+#include <P18F4520.H>
+#include<stdio.h>
+#pragma config OSC = HS, WDT = OFF, LVP = OFF
+void delay();
+void initialize();
+void and_gate();
+void or_gate();
+void nand_gate();
+void xor_gate();
+
+void delay(){
+int i,j;
+	for(i=1;i<150000;i++)
+		 j=0;//NOP
+}
+
+
+void initialize()
+{
+	ADCON1 = 0x0f; //Set All Port Digit I/O
+	TRISD = 0b10010011;// BSF TRISD, 0
+			   // BSF TRISD, 1 
+                           // BCF TRISD, 2
+                           // BCF TRISD, 3
+                           // BSF TRISD, 4
+                           // BCF TRISD, 5
+                           // BCF TRISD, 6 
+                           // BSF TRISD, 7
+	PORTD = 0;
+	TRISC = 0b11010010;// BCF TRISD, 0
+			   // BSF TRISD, 1 
+                           // BCF TRISD, 2
+                           // BCF TRISD, 3
+                           // BSF TRISD, 4
+                           // BCF TRISD, 5
+                           // BSF TRISD, 6 
+                           // BSF TRISD, 7
+
+	TRISB = 0b00000000;// BCF TRISD, 0
+			   // BCF TRISD, 1 
+                           // BCF TRISD, 2
+                           // BCF TRISD, 3
+                           // BCF TRISD, 4
+                           // BCF TRISD, 5
+                           // BCF TRISD, 6 
+                           // BCF TRISD, 7
+ 
+        TRISE = 0b111;     // BSF TRISD, 0
+			   // BSF TRISD, 1 
+                           // BSF TRISD, 2                                                    
+}	
+
+void and_gate()
+{
+		counter=0; // COUNT_1 SET 0x00
+		
+	 	PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+                //BTFSC PORTC, 1
+                //DECF COUNT_1,F
+                //MOVLW 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_1,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_1, F    
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+		}		
+		
+		PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+                //BTFSC PORTC, 1
+                //DECF COUNT_1,F
+                //addlw 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_1,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_1, F     
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+		}
+		
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+                //BTFSC PORTC, 1
+                //DECF COUNT_1,F
+                //addlw 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_1,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_1, F   
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+		}
+	
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+	        //BTFSS PORTC, 1
+                //DECF COUNT_1,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_1,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_1,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_1, F 
+
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+		}
+		
+		if (counter==4){  // check for 0x10h in COUNT_1 OR D'16' in COUNT_1
+			PORTB=0b01101110; // bcf PORTB, 0
+                                          // bsf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bsf PORTB, 3
+					  // bcf PORTB, 4
+                                          // bsf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+			delay();			
+		}
+		else
+		{
+			PORTB=0b01010100; // bcf PORTB, 0
+                                          // bcf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bcf PORTB, 3
+					  // bsf PORTB, 4
+                                          // bcf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+                        delay();
+		}
+}
+
+
+void or_gate(){
+
+		counter=0; // COUNT_2 SET 0x00
+		
+	 	PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+                //BTFSC PORTC, 1
+                //DECF COUNT_2,F
+                //MOVLW 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_2,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_2, F       
+
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+	       
+		}
+
+		PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_2,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_2,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_2, F
+
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+
+		}	
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_2,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_2,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_2, F   
+
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+
+		}
+	
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+	        //BTFSS PORTC, 1
+                //DECF COUNT_2,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_2,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_2,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_2, F 
+
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1){
+			counter++;
+
+                
+		
+		delay();
+		if (counter==4){  // check for 0x10h in COUNT_1 OR D'16' in COUNT_1
+			PORTB=0b01101110; // bcf PORTB, 0
+                                          // bsf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bsf PORTB, 3
+					  // bcf PORTB, 4
+                                          // bsf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+			delay();			
+		}
+		else
+		{
+			PORTB=0b01010100; // bcf PORTB, 0
+                                          // bcf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bcf PORTB, 3
+					  // bsf PORTB, 4
+                                          // bcf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+
+                        delay();
+		}
+
+}
+
+void nand_gate()
+{
+		counter=0; // COUNT_3 SET 0x00
+		
+	 	PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+		
+                //BTFSS PORTC, 1
+                //DECF COUNT_3,F
+                //MOVLW 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_3,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_3, F                 
+               
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++; 
+		}
+
+		
+		PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_3,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_3,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_3, F     
+ 
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+		}
+		
+
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_3,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_3,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_3, F   
+   
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+		}
+	
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+	        //BTFSC PORTC, 1
+                //DECF COUNT_3,F
+                //addlw 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_3,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_3,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_3, F  
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+		}
+		
+		if (counter==4){  // check for 0x10h in COUNT_1 OR D'16' in COUNT_1
+			PORTB=0b01101110; // bcf PORTB, 0
+                                          // bsf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bsf PORTB, 3
+					  // bcf PORTB, 4
+                                          // bsf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+			delay();			
+		}
+		else
+		{
+			PORTB=0b01010100; // bcf PORTB, 0
+                                          // bcf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bcf PORTB, 3
+					  // bsf PORTB, 4
+                                          // bcf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+
+                        delay();
+		}
+}
+
+void xor_gate()
+{
+				counter=0; // COUNT_4 SET 0x00
+		
+	 	PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+		
+                //BTFSC PORTC, 1
+                //DECF COUNT_4,F
+                //MOVLW 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_4,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_4, F                 
+               
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++; 
+		}
+
+		
+		PORTCbits.RC5 = 0;// bcf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 0;// bcf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 0;// bcf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 0;// bcf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_4,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_4,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_4, F     
+ 
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+		}
+		
+
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 0;// bcf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 0;// bcf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 0;// bcf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 0;// bcf PORTD, 2
+
+
+                //BTFSS PORTC, 1
+                //DECF COUNT_4,F
+                //addlw 0x01H
+                //BTFSS PORTC, 4
+                //DECF COUNT_4,F 
+                //ADDLW 0x01H
+                //BTFSS PORTD, 4
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //BTFSS PORTD, 1
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_4, F   
+   
+		if(PORTCbits.RC1 == 1 && PORTCbits.RC4 == 1 && PORTDbits.RD4 == 1 && PORTDbits.RD1 == 1)
+		{ 
+			counter++;
+		}
+	
+
+		PORTCbits.RC5 = 1;// bsf PORTC, 5
+		PORTCbits.RC0 = 1;// bsf PORTC, 0
+		PORTCbits.RC2 = 1;// bsf PORTC, 2
+		PORTCbits.RC3 = 1;// bsf PORTC, 3
+		PORTDbits.RD6 = 1;// bsf PORTD, 6
+		PORTDbits.RD5 = 1;// bsf PORTD, 5
+		PORTDbits.RD3 = 1;// bsf PORTD, 3
+		PORTDbits.RD2 = 1;// bsf PORTD, 2
+
+
+	        //BTFSC PORTC, 1
+                //DECF COUNT_4,F
+                //addlw 0x01H
+                //BTFSC PORTC, 4
+                //DECF COUNT_4,F 
+                //ADDLW 0x01H
+                //BTFSC PORTD, 4
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //BTFSC PORTD, 1
+                //DECF COUNT_4,F
+                //ADDLW 0x01H
+                //MOVWF COUNT_4, F  
+
+		if(PORTCbits.RC1 == 0 && PORTCbits.RC4 == 0 && PORTDbits.RD4 == 0 && PORTDbits.RD1 == 0)
+		{ 
+			counter++;
+		}
+		
+		if (counter==4){  // check for 0x10h in COUNT_1 OR D'16' in COUNT_1
+			PORTB=0b01101110; // bcf PORTB, 0
+                                          // bsf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bsf PORTB, 3
+					  // bcf PORTB, 4
+                                          // bsf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+			delay();			
+		}
+		else
+		{
+			PORTB=0b01010100; // bcf PORTB, 0
+                                          // bcf PORTB, 1
+				          // bsf PORTB, 2
+                                          // bcf PORTB, 3
+					  // bsf PORTB, 4
+                                          // bcf PORTB, 5
+					  // bsf PORTB, 6
+                                          // bcf PORTB, 7
+
+                        delay();
+		}
+}
+            // ORG 0x00
+void main() // Main: Movlw 0x00
+{	
+	initialize(); // CALL Initialize 
+	delay();
+	PORTB=0b01000000;// bcf PORTB, 0
+                         // bcf PORTB, 1
+         	         // bcf PORTB, 2
+                         // bcf PORTB, 3
+			 // bcf PORTB, 4
+                         // bcf PORTB, 5
+			 // bsf PORTB, 6
+                         // bcf PORTB, 7
+
+	delay();
+while(1) // HERE: 
+{
+	if(PORTCbits.RC6 == 0)// btfsc PORTC, 6
+		and_gate();//  CALL GATE_AND 
+	
+	else if(PORTCbits.RC7 == 0)// btfsc PORTC, 7
+		or_gate();//  CALL GATE_OR
+        
+        else if(PORTDbits.RD0 == 0)// btfsc PORTD, 0
+		nand_gate();//  CALL GATE_NAND        
+	
+        else if(PORTDbits.RD7 == 0)// btfsc PORTD, 7
+		xor_gate();//  CALL GATE_XOR
+        
+}// CALL HERE
+}
